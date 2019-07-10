@@ -22,7 +22,7 @@
 
 
 int main(int argc, char** argv) {
-    int vMenuPrincipal, vSubMenu, vSimNao, vInteiraGlobal;
+    int vMenuPrincipal, vSubMenu, vSimNao, vInteiraGlobal, vAux;
     char vStringGeral[255];
     do{
         vMenuPrincipal = menuPrincipal();
@@ -270,18 +270,19 @@ int main(int argc, char** argv) {
                           }while(vSimNao == 1); break;
                     case 'C': do{
                                  cabecalhoGeral("CONSULTA DE ITEM DE SERVIÇO");
-                                 printf("DIGITE O CODIGO DO REGISTRO A SER CONSULTADO: ");
-                                 scanf("%i", &vInteiraGlobal);
-                                 sprintf(vStringGeral, "select * from item_servico where p_codigo = %i;", vInteiraGlobal);
+                                 printf("DIGITE O CODIGO DA ORDEM DE SERVIÇO E DO PRODUTO A SER CONSULTADO: ");
+                                 scanf("%i%i", &vInteiraGlobal, &vAux);
+                                 sprintf(vStringGeral, "select * from item_servico where f_ordem_servico = %i and f_produto = %i;", vInteiraGlobal, vAux);
+                             //    printf("%s", vStringGeral);
                                  ConsultarRegistro(vStringGeral); 
                                  printf("DESEJA CONSULTAR OUTRO REGISTRO?\n(1)SIM (2)NÃO\n");
                                  scanf("%i", &vSimNao);
                           }while(vSimNao == 1); break;
                     case 'E': do{
                                  cabecalhoGeral("EXCLUSÂO DE ITEM DE SERVIÇO");
-                                 printf("DIGITE O CODIGO DO REGISTRO A SER EXCLUIDO: ");
+                                 printf("DIGITE O CODIGO DA ORDEM DE SERVIÇO E DO PRODUTO A SER EXCLUIDO: ");
                                  scanf("%i", &vInteiraGlobal);
-                                 sprintf(vStringGeral, "delete from item_servico where p_codigo = %i;", vInteiraGlobal);
+                                 sprintf(vStringGeral, "delete from item_servico where f_ordem_servico = %i and f_produto = %i;", vInteiraGlobal, vAux);
                                  ExcluirRegistro(vStringGeral); 
                                  printf("DESEJA EXCLUIR OUTRO REGISTRO?\n(1)SIM (2)NÃO\n");
                                  scanf("%i", &vSimNao);
@@ -317,8 +318,16 @@ int main(int argc, char** argv) {
                               printf("OBSERVAÇÕES GERAIS: ");
                               fgets(sOrdemServico.vObservacao, sizeof(sOrdemServico.vObservacao), stdin); 
                               setbuf(stdin, NULL);
-                              sprintf(vStringGeral, "insert into ordem_servico(f_funcionario, f_cliente, f_aparelho, data_abertura, sts, defeito_reclamado, observacao) values('%i', '%i', '%i', '%s', '%s', '%s', '%s');", 
-                              sOrdemServico.vF_Funcionario, sOrdemServico.vF_Cliente, sOrdemServico.vF_Aparelho, sOrdemServico.vDataAbertura, sOrdemServico.vSituacao, sOrdemServico.vDefeitoReclamado, sOrdemServico.vObservacao);
+                              printf("lAUDO: ");
+                              fgets(sOrdemServico.vLaudo, sizeof(sOrdemServico.vLaudo), stdin); 
+                              setbuf(stdin, NULL); 
+                              printf("VLR MÂO DE OBRA: ");
+                              scanf("%f", &sOrdemServico.vVlr_Mo); 
+                              setbuf(stdin, NULL);  
+                              printf("DATA FECHAMENTO: "); 
+                              fgets(sOrdemServico.vDataFechamento, sizeof(sOrdemServico.vDataFechamento), stdin); 
+                              sprintf(vStringGeral, "insert into ordem_servico(f_funcionario, f_cliente, f_aparelho, data_abertura, sts, defeito_reclamado, observacao, laudo, vlr_mo, data_fechamento) values('%i', '%i', '%i', '%s', '%s', '%s', '%s', '%s', '%f', '%s');", 
+                              sOrdemServico.vF_Funcionario, sOrdemServico.vF_Cliente, sOrdemServico.vF_Aparelho, sOrdemServico.vDataAbertura, sOrdemServico.vSituacao, sOrdemServico.vDefeitoReclamado, sOrdemServico.vObservacao, sOrdemServico.vLaudo, sOrdemServico.vVlr_Mo, sOrdemServico.vDataFechamento);
                               InserirRegistro(vStringGeral);
                               printf("DESEJA INSERIR OUTRO REGISTRO?\n(1)SIM (2)NÃO\n");
                               scanf("%i", &vSimNao);
@@ -350,8 +359,16 @@ int main(int argc, char** argv) {
                               printf("OBSERVAÇÕES GERAIS: ");
                               fgets(sOrdemServico.vObservacao, sizeof(sOrdemServico.vObservacao), stdin); 
                               setbuf(stdin, NULL);
-                              sprintf(vStringGeral, "update ordem_servico set f_funcionario = '%i',  f_cliente = '%i', f_aparelho = '%i', data_abertura = '%s', sts = '%s', defeito_reclamado = '%s', observacao = '%s';", 
-                              sOrdemServico.vF_Funcionario, sOrdemServico.vF_Cliente, sOrdemServico.vF_Aparelho, sOrdemServico.vDataAbertura, sOrdemServico.vSituacao, sOrdemServico.vDefeitoReclamado, sOrdemServico.vObservacao, vInteiraGlobal);
+                              printf("lAUDO: ");
+                              fgets(sOrdemServico.vLaudo, sizeof(sOrdemServico.vLaudo), stdin); 
+                              setbuf(stdin, NULL); 
+                              printf("VLR MÂO DE OBRA: ");
+                              scanf("%f", &sOrdemServico.vVlr_Mo); 
+                              setbuf(stdin, NULL);  
+                              printf("DATA FECHAMENTO: "); 
+                              fgets(sOrdemServico.vDataFechamento, sizeof(sOrdemServico.vDataFechamento), stdin); 
+                              sprintf(vStringGeral, "update ordem_servico set f_funcionario = '%i',  f_cliente = '%i', f_aparelho = '%i', data_abertura = '%s', sts = '%s', defeito_reclamado = '%s', observacao = '%s', laudo = '%s', vlr_mo = '%f', data_fechamento = '%s';", 
+                              sOrdemServico.vF_Funcionario, sOrdemServico.vF_Cliente, sOrdemServico.vF_Aparelho, sOrdemServico.vDataAbertura, sOrdemServico.vSituacao, sOrdemServico.vDefeitoReclamado, sOrdemServico.vObservacao, sOrdemServico.vLaudo, sOrdemServico.vVlr_Mo, sOrdemServico.vDataFechamento, vInteiraGlobal);
                               EditarRegistro(vStringGeral);
                               printf("DESEJA ATUALIZAR OUTRO REGISTRO?\n(1)SIM (2)NÃO\n");
                               scanf("%i", &vSimNao);
